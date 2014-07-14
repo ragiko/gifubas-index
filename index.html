@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gifu bus api</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+
+	  <div class="page-header">
+	    <h1>岐阜バスAPI</h1>
+	    <p class="lead">岐阜バスNaviから乗り換え情報を取得するAPIです。最大3件までデータを取得できます</p>
+	  </div>
+
+	  <h3>リクエストURL</h3>
+	  <p>http://gifubus-api.herokuapp.com/</p>
+
+      <!-- 概要　リクエストURLkkkk -->
+      
+	  <h3>リクエストパラメータ</h3>
+      <table class="table table-bordered">
+          <tr>
+              <td>パラメータ</td>
+              <td>値</td>
+              <td>説明</td>
+              <td>例</td>
+          </tr>
+          <tr>
+              <td>date</td>
+              <td>string</td>
+              <td>日付を入力</td>
+              <td>2014/07/14</td>
+          </tr>
+          <tr>
+              <td>time</td>
+              <td>integer</td>
+              <td>時間を入力</td>
+              <td>0700 (AM 7:00の時) </td>
+          </tr>
+          <tr>
+              <td>start_arrive</td>
+              <td>integer</td>
+              <td>到着時刻か出発時刻を選択。到着時刻を検索するなら0、出発時刻を検索するなら1</td>
+              <td>0 or 1</td>
+          </tr>
+          <tr>
+              <td>start_name</td>
+              <td>string</td>
+              <td>出発地を入力</td>
+              <td>岐阜大学</td>
+          </tr>
+          <tr>
+              <td>arrive_name</td>
+              <td>string</td>
+              <td>到着地を入力</td>
+              <td>JR岐阜</td>
+          </tr>
+      </table>
+
+      
+	  <p>サンプルリクエスト</p>
+      <p>日付: 2014年7月14日, 時刻: 16時5分, 出発地: 岐阜大学, 到着地: JR岐阜, 到着時刻検索</p>
+      <ul>
+          <li><p>
+            <a href="http://gifubus-api.herokuapp.com/?date=2014/07/14&time=1605&start_arrive=0&start_name=%E5%B2%90%E9%98%9C%E5%A4%A7%E5%AD%A6&arrive_name=JR%E5%B2%90%E9%98%9C">http://gifubus-api.herokuapp.com/?date=2014/07/14&time=1605&start_arrive=0&start_name=%E5%B2%90%E9%98%9C%E5%A4%A7%E5%AD%A6&arrive_name=JR%E5%B2%90%E9%98%9C</a>
+          </p></li>
+          <li>
+            <a href="http://navi.gifubus.co.jp/Frm_0160.aspx?ge=t3_1kv_4nz_5fr_67j&id=1qc3jq&ia=1qc346&d=1&t=1605&a=1&tt=1&cm=1&ds=%E5%B2%90%E9%98%9C%E5%A4%A7%E5%AD%A6&as=%EF%BC%AA%EF%BC%B2%E5%B2%90%E9%98%9C&inpym=2014%2f07&inpymd=2014%2f07%2f14&inpt=1605&inpa=1">岐阜バスNaviの実際のページ</a>
+          </li>
+      </ul>
+
+      <hr>
+
+      <h3>レスポンスフィールド</h3>
+      <p>岐阜バスNaviから乗り換え情報を取得するAPIのレスポンスのスキーマの記述は、以下になります</p>
+
+      <table class="table table-bordered">
+          <tr>
+              <td>フィールド</td>
+              <td>説明</td>
+          </tr>
+          <tr>
+              <td>/data/price</td>
+              <td>乗車時の賃金</td>
+          </tr>
+          <tr>
+              <td>/data/time</td>
+              <td>乗車時間</td>
+          </tr>
+          <tr>
+              <td>/data/transfer</td>
+              <td>乗り換え回数</td>
+          </tr>
+          <tr>
+              <td>/data/info</td>
+              <td>詳細情報。乗り換えが１回の時は2つの配列</td>
+          </tr>
+          <tr>
+              <td>/data/info/start_name</td>
+              <td>乗車駅名</td>
+          </tr>
+          <tr>
+              <td>/data/info/start_time</td>
+              <td>乗車時刻</td>
+          </tr>
+          <tr>
+              <td>/data/info/arrive_name</td>
+              <td>到着駅名</td>
+          </tr>
+          <tr>
+              <td>/data/info/arrive_time</td>
+              <td>到着時刻</td>
+          </tr>
+          <tr>
+              <td>/data/info/between_minutes</td>
+              <td>乗車時間</td>
+          </tr>
+          <tr>
+              <td>/data/info/fare</td>
+              <td>乗車賃金</td>
+          </tr>
+          <tr>
+              <td>/data/info/details</td>
+              <td>〜線, ルート</td>
+          </tr>
+      </table>
+
+      <hr>
+      <h3>サンプルレスポンス</h3>
+
+      <pre>
+{
+  "data": [
+    {
+      "info": [
+        {
+          "arrive_name": "ＪＲ岐阜　降車専用", 
+          "arrive_time": "11:09", 
+          "between_minutes": "26分", 
+          "details": [
+            "岐阜大学・病院線", 
+            "ＪＲ岐阜行き", 
+            "岐阜バス", 
+            "C", 
+            "岐阜大学・病院線", 
+            "岐大病院→岐阜大学→忠節橋→徹明町"
+          ], 
+          "fare": "320円", 
+          "start_name": "岐阜大学", 
+          "start_time": "10:43"
+        }
+      ], 
+      "price": "320円", 
+      "time": "26分", 
+      "transfer": "0回"
+    }, 
+    {
+      "info": [
+        {
+          "arrive_name": "ＪＲ岐阜　降車専用", 
+          "arrive_time": "11:29", 
+          "between_minutes": "26分", 
+          "details": [
+            "岐阜大学・病院線", 
+            "ＪＲ岐阜行き", 
+            "岐阜バス", 
+            "C", 
+            "岐阜大学・病院線", 
+            "岐大病院→岐阜大学→忠節橋→徹明町"
+          ], 
+          "fare": "320円", 
+          "start_name": "岐阜大学", 
+          "start_time": "11:03"
+        }
+      ], 
+      "price": "320円", 
+      "time": "26分", 
+      "transfer": "0回"
+    }, 
+    {
+    "info": [
+      {
+        "arrive_name": "ＪＲ岐阜　５番のりば", 
+        "arrive_time": "11:31", 
+        "between_minutes": "34分", 
+        "details": [
+          "岐南町線", 
+          "岐南町三宅行き", 
+          "岐阜バス", 
+          "E16", 
+          "岐南町線", 
+          "岐大病院→さぎ山東→長良北町→ＪＲ岐阜→領下"
+        ], 
+        "fare": "320円", 
+        "start_name": "岐阜大学", 
+        "start_time": "10:57"
+      }
+    ], 
+    "price": "320円", 
+    "time": "34分", 
+    "transfer": "0回"
+    }
+  ]
+}
+      </pre>
+
+      <hr>
+      <h3>作った人</h3>
+      <p>taguchi hiroaki</p>
+
+	</div>
+</body>
+</html>
